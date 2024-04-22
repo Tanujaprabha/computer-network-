@@ -1,0 +1,37 @@
+import socket
+
+# Define the server's IP address and port
+SERVER_IP = '127.0.0.1'  # Loopback address for local testing
+SERVER_PORT = 12345
+
+# Create a TCP socket
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Bind the socket to the IP address and port
+server_socket.bind((SERVER_IP, SERVER_PORT))
+
+# Start listening for incoming connections
+server_socket.listen(1)
+print("Server is listening for incoming connections...")
+
+# Accept a client connection
+client_socket, client_address = server_socket.accept()
+print(f"Connection established with {client_address}")
+
+while True:
+    # Receive data from the client
+    data = client_socket.recv(1024).decode()
+    
+    if not data:
+        break  # Break the loop if no data is received
+    
+    print(f"Received from client: {data}")
+    
+    # Echo the received data back to the client
+    client_socket.sendall(data.encode())
+
+# Close the client socket
+client_socket.close()
+
+# Close the server socket
+server_socket.close()
